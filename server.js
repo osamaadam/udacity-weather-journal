@@ -16,26 +16,17 @@ const server = app.listen(port, () => {
   console.log(`Listening on port: ${port}`);
 });
 
-let projectData = [
-  {
-    date: Date.now(),
-    temp: "over 9000",
-    content: "nothing entered yet, this is a placeholder!",
-    placeholder: true
-  }
-];
+let projectData = {
+  date: Date.now(),
+  temp: "over 9000",
+  content: "nothing entered yet, this is a placeholder!"
+};
 
-app.get("/all", (req, res) => {
+app.get("/recent", (req, res) => {
   res.json(projectData);
 });
 
-app.get("/recent", (req, res) => {
-  if (projectData) res.json(projectData[projectData.length - 1]);
-  else res.status(404).json("projectData is empty");
-});
-
 app.post("/data", (req, res) => {
-  if (projectData.length === 1 && projectData.placeholder) projectData[0] = req.body;
-  else projectData.push(req.body);
+  projectData = req.body;
   res.json("data received");
 });

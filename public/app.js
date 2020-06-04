@@ -1,4 +1,4 @@
-const form = document.querySelector("#form");
+const button = document.querySelector("#generate");
 
 const zip = document.querySelector("#zip");
 const feelings = document.querySelector("#feelings");
@@ -14,13 +14,13 @@ let data = null;
 window.onload = async () => {
   if (data === null) {
     data = await getData("/recent");
-    date.textContent = `Date: ${new Date(data.date)}`;
-    temp.textContent = `Temperature: ${data.temp}`;
-    content.textContent = data.content && `Content: ${data.content}`;
+    date.innerHTML = `Date: ${new Date(data.date)}`;
+    temp.innerHTML = `Temperature: ${data.temp}`;
+    content.innerHTML = data.content && `Content: ${data.content}`;
   }
 };
 
-form.addEventListener("submit", async (event) => {
+button.addEventListener("click", async (event) => {
   event.preventDefault();
   const zipCode = zip.value.trim();
 
@@ -36,10 +36,12 @@ form.addEventListener("submit", async (event) => {
 
   const result = await postData("/data", data);
 
-  if (result) {
-    date.textContent = `Date: ${new Date(data.date)}`;
-    temp.textContent = `Temperature: ${data.temp}`;
-    content.textContent = data.content && `Content: ${data.content}`;
+  if (result === "data received") {
+    const newData = await getData("/recent");
+
+    date.innerHTML = `Date: ${new Date(newData.date)}`;
+    temp.innerHTML = `Temperature: ${newData.temp}&#730c`;
+    content.innerHTML = newData.content ? `Content: ${newData.content}` : "";
   }
 });
 
